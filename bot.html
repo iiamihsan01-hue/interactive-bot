@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ellie — Interactive Elephant Widget</title>
+  <meta name="description" content="Ellie the elephant bot — an adorable, draggable, interactive widget you can embed on any webpage." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', 'Segoe UI', sans-serif;
+      background: #f7f5ff;
+      color: #3d3250;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Soft gradient bg ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(212,207,232,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(240,184,200,0.3) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 70% at 60% 10%, rgba(196,185,224,0.2) 0%, transparent 70%);
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 54px 24px 120px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 60px 0 44px;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      background: rgba(124,111,160,0.1);
+      color: #7c6fa0;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(124,111,160,0.2);
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+      font-weight: 400;
+      color: #3d3250;
+      line-height: 1.18;
+      margin-bottom: 18px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, #9b8ec4, #d490ab);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: #7c6fa0;
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.75;
+      font-weight: 400;
+    }
+    .hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #9b8ec4;
+      font-size: 13px;
+      font-weight: 500;
+      animation: hint-bounce 2s ease-in-out infinite;
+    }
+    @keyframes hint-bounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(7px); }
+    }
+
+    /* ── Cards ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 50px 0;
+    }
+    .card {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(124,111,160,0.12);
+      border-radius: 20px;
+      padding: 26px 20px;
+      backdrop-filter: blur(10px);
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .card:hover {
+      box-shadow: 0 8px 32px rgba(124,111,160,0.12);
+      transform: translateY(-4px);
+    }
+    .card-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+    .card h3 { font-size: 14px; font-weight: 600; color: #3d3250; margin-bottom: 7px; }
+    .card p  { font-size: 12.5px; color: #9b8ec4; line-height: 1.65; }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(124,111,160,0.2), transparent);
+      margin: 40px 0;
+    }
+
+    /* ── Embed section ── */
+    .embed-section {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(124,111,160,0.14);
+      border-radius: 24px;
+      padding: 36px;
+      backdrop-filter: blur(10px);
+      margin: 32px 0;
+    }
+    .embed-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: #3d3250;
+      margin-bottom: 8px;
+    }
+    .embed-section p { color: #9b8ec4; font-size: 13px; margin-bottom: 20px; }
+
+    pre {
+      background: #f2f0fa;
+      border: 1px solid rgba(124,111,160,0.15);
+      border-radius: 14px;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #7c6fa0;
+      overflow-x: auto;
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: white;
+      border: 1px solid rgba(124,111,160,0.25);
+      color: #7c6fa0;
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, color 0.2s;
+    }
+    .copy-btn:hover { background: #7c6fa0; color: white; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #c4b9e0;
+      font-size: 12px;
+    }
+    footer span { color: #9b8ec4; }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+  <section class="hero">
+    <div class="hero-eyebrow">🐘 Interactive Widget</div>
+    <h1>Meet <span>Ellie</span>,<br/>your tiny elephant friend</h1>
+    <p>A minimalist, classy bot that lives at the edge of your screen — click her and she'll walk all the way over to say hello.</p>
+    <div class="hint">↘ Look for Ellie in the corner!</div>
+  </section>
+
+  <section class="features">
+    <div class="card">
+      <span class="card-icon">🚶</span>
+      <h3>Walks to you</h3>
+      <p>Tap Ellie and she'll walk across the screen, swinging her trunk, all the way to the center to greet you.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">👀</span>
+      <h3>Peeks from edges</h3>
+      <p>When idle, she sneaks to the nearest edge and peeks in, bobbing up and down — too cute to ignore.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🐾</span>
+      <h3>Footprints</h3>
+      <p>She leaves little footprints as she trots across the screen, creating a trail of her journey.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🎮</span>
+      <h3>Mini-games</h3>
+      <p>Rock Paper Scissors, trivia, jokes, and a mood tracker — all packed into the playground panel.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🖱️</span>
+      <h3>Drag anywhere</h3>
+      <p>Grab Ellie and drop her wherever you like — she stays put with a colorful particle trail.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">💌</span>
+      <h3>Drop-in embed</h3>
+      <p>Two lines of HTML is all it takes to add Ellie to any existing webpage instantly.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="embed-section">
+    <h2>📌 Add to any page</h2>
+    <p>Paste inside the <code>&lt;body&gt;</code> tag of any HTML file:</p>
+    <pre id="snippet-pre"><button class="copy-btn" id="copy-btn">Copy</button>&lt;link rel="stylesheet" href="bot.css" /&gt;
+&lt;script src="bot.js" defer&gt;&lt;/script&gt;</pre>
+    <p style="margin-top:14px;font-size:12px;">Make sure <code>bot.css</code> and <code>bot.js</code> are in the same folder (or update the paths).</p>
+  </section>
+</div>
+
+<footer>Made with 💜 by <span>Ellie the Elephant</span> — embed anywhere, play everywhere</footer>
+
+<!-- ═══ The Bot ═══ -->
+<link rel="stylesheet" href="bot.css" />
+<script src="bot.js" defer></script>
+
+<script>
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    const code = `<link rel="stylesheet" href="bot.css" />\n<script src="bot.js" defer><\/script>`;
+    navigator.clipboard.writeText(code).then(() => {
+      this.textContent = '✅ Copied!';
+      setTimeout(() => { this.textContent = 'Copy'; }, 2000);
+    }).catch(() => {
+      this.textContent = '📋 Copy above manually';
+    });
+  });
+</script>
+
+</body>
+</html>

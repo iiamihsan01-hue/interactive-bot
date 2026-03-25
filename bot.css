@@ -1,0 +1,427 @@
+/* ==========================================
+   CUTEBOT — ELEPHANT CUB EDITION — bot.css
+   Minimalist · Classy · Cute
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+
+:root {
+  --bot-size: 80px;
+  --eleph-grey:  #d4cfe8;
+  --eleph-light: #ede9f7;
+  --eleph-dark:  #9b8ec4;
+  --eleph-blush: #f0b8c8;
+  --eleph-eye:   #3d3250;
+  --accent:      #7c6fa0;
+  --bg-panel:    rgba(255,255,255,0.97);
+  --border:      rgba(124,111,160,0.18);
+  --shadow:      0 8px 40px rgba(124,111,160,0.22);
+  --z: 999999;
+}
+
+/* ─── Container ────────────────────────────── */
+#cute-bot {
+  position: fixed;
+  width: var(--bot-size);
+  height: calc(var(--bot-size) * 1.1);
+  z-index: var(--z);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  filter: drop-shadow(0 6px 18px rgba(124,111,160,0.28));
+  will-change: transform, left, top;
+  /* NO global transition here — JS controls movement */
+}
+#cute-bot:active { cursor: grabbing; }
+
+/* ─── SVG wrapper ───────────────────────────── */
+#bot-svg-wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-origin: bottom center;
+}
+
+/* ────────────────────────────────────────────
+   IDLE FLOAT
+──────────────────────────────────────────── */
+@keyframes float-gentle {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+#cute-bot.idle #bot-svg-wrap {
+  animation: float-gentle 3.2s ease-in-out infinite;
+}
+
+/* ────────────────────────────────────────────
+   WALKING — done via JS step classes
+──────────────────────────────────────────── */
+@keyframes walk-body {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  25%     { transform: translateY(-4px) rotate(-1.5deg); }
+  75%     { transform: translateY(-4px) rotate(1.5deg); }
+}
+@keyframes walk-ear-l {
+  0%,100% { transform-origin: top right; transform: rotate(0deg); }
+  50%     { transform-origin: top right; transform: rotate(-8deg); }
+}
+@keyframes walk-ear-r {
+  0%,100% { transform-origin: top left; transform: rotate(0deg); }
+  50%     { transform-origin: top left; transform: rotate(8deg); }
+}
+@keyframes walk-trunk {
+  0%,100% { transform-origin: top center; transform: rotate(-6deg); }
+  50%     { transform-origin: top center; transform: rotate(6deg); }
+}
+@keyframes walk-leg-fl {
+  0%,100% { transform: rotate(0deg); }
+  25%     { transform: rotate(-14deg); }
+  75%     { transform: rotate(14deg); }
+}
+@keyframes walk-leg-fr {
+  0%,100% { transform: rotate(0deg); }
+  25%     { transform: rotate(14deg); }
+  75%     { transform: rotate(-14deg); }
+}
+@keyframes walk-leg-bl {
+  0%,100% { transform: rotate(0deg); }
+  25%     { transform: rotate(12deg); }
+  75%     { transform: rotate(-12deg); }
+}
+@keyframes walk-leg-br {
+  0%,100% { transform: rotate(0deg); }
+  25%     { transform: rotate(-12deg); }
+  75%     { transform: rotate(12deg); }
+}
+
+#cute-bot.walking #bot-svg-wrap            { animation: walk-body  0.45s linear infinite; }
+#cute-bot.walking #eleph-ear-l             { animation: walk-ear-l 0.45s ease-in-out infinite; }
+#cute-bot.walking #eleph-ear-r             { animation: walk-ear-r 0.45s ease-in-out infinite; }
+#cute-bot.walking #eleph-trunk             { animation: walk-trunk 0.45s ease-in-out infinite; }
+#cute-bot.walking #eleph-leg-fl            { animation: walk-leg-fl 0.45s ease-in-out infinite; transform-origin: 50% 0%; }
+#cute-bot.walking #eleph-leg-fr            { animation: walk-leg-fr 0.45s ease-in-out infinite; transform-origin: 50% 0%; }
+#cute-bot.walking #eleph-leg-bl            { animation: walk-leg-bl 0.45s ease-in-out infinite; transform-origin: 50% 0%; }
+#cute-bot.walking #eleph-leg-br            { animation: walk-leg-br 0.45s ease-in-out infinite; transform-origin: 50% 0%; }
+
+/* ────────────────────────────────────────────
+   ACTIVE (CENTER) — happy wiggly trunk
+──────────────────────────────────────────── */
+@keyframes trunk-happy {
+  0%,100% { transform-origin: top center; transform: rotate(-20deg) scaleX(1); }
+  50%     { transform-origin: top center; transform: rotate(20deg) scaleX(0.95); }
+}
+@keyframes ear-flap {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.12); }
+}
+#cute-bot.active #eleph-trunk { animation: trunk-happy 0.7s ease-in-out infinite; }
+#cute-bot.active #eleph-ear-l { animation: ear-flap 0.7s ease-in-out infinite; transform-origin: top right; }
+#cute-bot.active #eleph-ear-r { animation: ear-flap 0.7s ease-in-out infinite 0.35s; transform-origin: top left; }
+@keyframes active-body-bounce {
+  0%,100% { transform: scale(1) translateY(0); }
+  50%     { transform: scale(1.04) translateY(-5px); }
+}
+#cute-bot.active #bot-svg-wrap { animation: active-body-bounce 0.85s ease-in-out infinite; }
+
+/* ────────────────────────────────────────────
+   IDLE TRUNK — gentle sway
+──────────────────────────────────────────── */
+@keyframes trunk-idle {
+  0%,100% { transform-origin: top center; transform: rotate(-8deg); }
+  50%     { transform-origin: top center; transform: rotate(8deg); }
+}
+#cute-bot.idle #eleph-trunk { animation: trunk-idle 2.5s ease-in-out infinite; }
+
+/* ────────────────────────────────────────────
+   PEEK / HIDING at screen edge
+──────────────────────────────────────────── */
+
+/* The SVG peeks by sliding in/out — controlled via JS clip and transform */
+@keyframes peek-bob {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-5px); }
+}
+@keyframes peek-bob-horizontal {
+  0%,100% { transform: translateX(0); }
+  50%     { transform: translateX(4px); }
+}
+@keyframes trunk-peek {
+  0%,100% { transform-origin: top center; transform: rotate(0deg); }
+  50%     { transform-origin: top center; transform: rotate(30deg); }
+}
+
+@keyframes peek-glow {
+  0%,100% { filter: drop-shadow(0 0 6px rgba(155,142,196,0.5)); }
+  50%     { filter: drop-shadow(0 0 18px rgba(155,142,196,0.85)); }
+}
+#cute-bot.peek-left #bot-svg-wrap,
+#cute-bot.peek-right #bot-svg-wrap {
+  animation: peek-bob 2s ease-in-out infinite, peek-glow 1.5s ease-in-out infinite;
+}
+#cute-bot.peek-top #bot-svg-wrap,
+#cute-bot.peek-bottom #bot-svg-wrap {
+  animation: peek-bob-horizontal 2s ease-in-out infinite, peek-glow 1.5s ease-in-out infinite;
+}
+#cute-bot.peek-left #eleph-trunk,
+#cute-bot.peek-right #eleph-trunk,
+#cute-bot.peek-top #eleph-trunk,
+#cute-bot.peek-bottom #eleph-trunk {
+  animation: trunk-peek 2s ease-in-out infinite;
+}
+
+/* blink animation on eyes */
+@keyframes blink {
+  0%,90%,100% { transform: scaleY(1); }
+  93%         { transform: scaleY(0.08); }
+}
+#eleph-eye-l, #eleph-eye-r {
+  animation: blink 4.5s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+#eleph-eye-r { animation-delay: 0.1s; }
+
+/* ────────────────────────────────────────────
+   DRAG
+──────────────────────────────────────────── */
+#cute-bot.dragging #bot-svg-wrap {
+  animation: none !important;
+  transform: rotate(8deg) scale(1.08) !important;
+  transition: transform 0.1s ease;
+}
+
+/* ─── Speech bubble ─────────────────────────── */
+#bot-bubble {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: #ffffff;
+  color: var(--accent);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 4px 20px rgba(124,111,160,0.15);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+  z-index: 10;
+  max-width: 200px;
+  white-space: normal;
+  text-align: center;
+  min-width: 80px;
+}
+#bot-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #fff;
+  filter: drop-shadow(0 1px 1px rgba(124,111,160,0.1));
+}
+#bot-bubble.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Bubble repositions when peeking from sides */
+#cute-bot.peek-left  #bot-bubble,
+#cute-bot.peek-right #bot-bubble {
+  bottom: auto;
+  top: -30px;
+  left: 50%;
+}
+#cute-bot.peek-bottom #bot-bubble {
+  bottom: auto;
+  top: calc(100% + 12px);
+}
+#cute-bot.peek-bottom #bot-bubble::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: #fff;
+}
+
+/* ─── Particles ─────────────────────────────── */
+.bot-particle {
+  position: fixed;
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: calc(var(--z) - 2);
+  animation: particle-up 0.8s ease-out forwards;
+}
+@keyframes particle-up {
+  to { transform: translateY(-24px) scale(0); opacity: 0; }
+}
+
+/* ─── Footprint ─────────────────────────────── */
+.bot-footprint {
+  position: fixed;
+  pointer-events: none;
+  color: var(--eleph-dark);
+  font-size: 12px;
+  opacity: 0.55;
+  z-index: calc(var(--z) - 3);
+  animation: footprint-fade 1.2s ease-out forwards;
+  user-select: none;
+}
+@keyframes footprint-fade {
+  0%   { opacity: 0.55; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.7); }
+}
+
+/* ─── Game Panel ─────────────────────────────── */
+#bot-game {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(105%);
+  background: var(--bg-panel);
+  border: 1.5px solid var(--border);
+  border-radius: 28px 28px 0 0;
+  padding: 28px 28px 24px;
+  z-index: calc(var(--z) - 1);
+  box-shadow: 0 -12px 60px rgba(124,111,160,0.14);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  color: #3d3250;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  min-width: 320px;
+  max-width: 92vw;
+}
+#bot-game.open { transform: translateX(-50%) translateY(0); }
+
+#bot-game h3 {
+  margin: 0 0 18px;
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  text-align: center;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+.game-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.game-tab {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--accent);
+  border-radius: 20px;
+  padding: 5px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+}
+.game-tab:hover, .game-tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.game-section { display: none; }
+.game-section.active { display: block; }
+
+/* RPS */
+.rps-choices {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 10px 0;
+}
+.rps-btn {
+  font-size: 26px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+  line-height: 1;
+}
+.rps-btn:hover { background: rgba(124,111,160,0.08); border-color: var(--accent); transform: scale(1.1); }
+.rps-result { text-align: center; font-size: 13px; min-height: 36px; color: var(--accent); margin-top: 10px; font-weight: 500; }
+
+/* Trivia */
+.quiz-q { font-size: 14px; text-align: center; margin-bottom: 14px; font-weight: 500; color: #3d3250; line-height: 1.5; }
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.quiz-opt {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 9px 10px;
+  font-size: 12px;
+  color: #3d3250;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, border-color 0.2s;
+  font-weight: 500;
+}
+.quiz-opt:hover { background: rgba(124,111,160,0.07); border-color: var(--accent); }
+.quiz-opt.correct { background: #e8f5f0; border-color: #4caf7d; color: #2a7a52; }
+.quiz-opt.wrong   { background: #fdf0f0; border-color: #e08080; color: #b94040; }
+
+/* Jokes */
+.joke-text { font-size: 14px; text-align: center; line-height: 1.65; min-height: 60px; color: #3d3250; font-weight: 400; }
+.joke-btn {
+  display: block;
+  margin: 14px auto 0;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 9px 26px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.joke-btn:hover { opacity: 0.85; transform: scale(1.04); }
+
+/* Mood */
+.mood-row { display: flex; justify-content: center; gap: 10px; font-size: 24px; margin: 8px 0; }
+.mood-btn {
+  background: none;
+  border: 1.5px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 24px;
+  line-height: 1;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.mood-btn:hover { border-color: var(--accent); transform: scale(1.18); }
+.mood-response { text-align: center; font-size: 13px; color: var(--accent); min-height: 30px; font-weight: 500; margin-top: 4px; }
+
+/* Close */
+#bot-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: var(--eleph-dark);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 8px;
+  line-height: 1;
+  transition: background 0.2s;
+  opacity: 0.65;
+}
+#bot-close:hover { background: rgba(124,111,160,0.1); opacity: 1; }
